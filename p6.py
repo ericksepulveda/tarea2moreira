@@ -1,24 +1,60 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import sys
 from igraph import *
 DATADIR = "redes/"
 
-g = Graph.Read_GML(DATADIR + "roget.gml")
 
-cores = {}
+def main():
+	g = Graph.Read_GML(DATADIR + "roget.gml")
+	nodeCount = len(g.vs)
+	edgeCount = len(g.es)
 
-cores[1] = dict([("graph", g.k_core(1))])
-cores[1]["vcount"] = len(cores[1]["graph"].vs)
-cores[1]["ecount"] = len(cores[1]["graph"].es)
+	# Average degree
+	degrees = g.degree()
+	degreeSum = reduce(lambda x,y: x+y, degrees)
+	averageDegree = degreeSum/len(degrees)
+	
+	# Getting data from original graph
+	cores = getCores(g)
+	printCores(cores, 'Red Original')
 
-i = 1
+	# Original rewired
+	g.rewire(edgeCount*2)
+	cores = getCores(g)
+	printCores(cores, 'Red Recableada')
 
-while cores[i]["vcount"] > 0:
-	i+=1
-	cores[i] = dict([("graph", g.k_core(i))])
-	cores[i]["vcount"] = len(cores[i]["graph"].vs)
-	cores[i]["ecount"] = len(cores[i]["graph"].es)
+	# Erdös-Renyi
+	g = Graph.Erdos_Renyi(nodeCount, m=edgeCount)
+	cores = getCores(g)
+	printCores(cores, 'Erdös-Renyi')
 
-del cores[i]
+	# Barabási-Albert
+	g = Graph.Barabasi(nodeCount, m=averageDegree/2)
+	cores = getCores(g)
+	printCores(cores, 'Barabási-Albert')
 
-for i in range(len(cores)):
-	print 
+def printCores(cores, title):
+	print title
+	print "k-core\t\tnodos\taristas"
+	for i in range(len(cores)):
+		print str(i) + "-core: \t" + str(cores[i]["vcount"]) + "\t" + str(cores[i]["ecount"])
+
+def getData(core):
+	core = dict([("graph", core)])
+	core["vcount"] = len(core["graph"].vs)
+	core["ecount"] = len(core["graph"].es)
+	return core
+
+def getCores(graph):
+	cores = {}
+	cores[0] = getData(graph.k_core(0))
+	i = 0
+	while cores[i]["vcount"] > 0:
+		i+=1
+		cores[i] = getData(graph.k_core(i))
+	del cores[i]
+	return cores
+
+if __name__ == "__main__":
+  main()
