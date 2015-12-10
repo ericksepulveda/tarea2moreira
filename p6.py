@@ -16,37 +16,25 @@ def main():
 	averageDegree = degreeSum/len(degrees)
 	
 	# Getting data from original graph
-	cores = getCores(g)
-	modularity = getModularity(g)
-	assortativity = g.assortativity_degree()
-	printCores(cores, 'Red Original')
-	print "Modularidad\t" + str(modularity)
-	print "Asortatividad\t" + str(assortativity)
+	p6magic(g, 'Red Original')
 
 	# Original rewired
 	g.rewire(edgeCount*2)
-	cores = getCores(g)
-	modularity = getModularity(g)
-	assortativity = g.assortativity_degree()
-	printCores(cores, 'Red Recableada')
-	print "Modularidad\t" + str(modularity)
-	print "Asortatividad\t" + str(assortativity)
+	p6magic(g, 'Red Recableada')
 
 	# Erdös-Renyi
 	g = Graph.Erdos_Renyi(nodeCount, m=edgeCount)
-	cores = getCores(g)
-	modularity = getModularity(g)
-	assortativity = g.assortativity_degree()
-	printCores(cores, 'Erdös-Renyi')
-	print "Modularidad\t" + str(modularity)
-	print "Asortatividad\t" + str(assortativity)
+	p6magic(g, 'Erdös-Renyi')
 
 	# Barabási-Albert
 	g = Graph.Barabasi(nodeCount, m=averageDegree/2)
-	cores = getCores(g)
-	modularity = getModularity(g)
-	assortativity = g.assortativity_degree()
-	printCores(cores, 'Barabási-Albert')
+	p6magic(g, 'Barabási-Albert')
+
+def p6magic(graph, name):
+	cores = getCores(graph)
+	modularity = getModularity(graph)
+	assortativity = graph.assortativity_degree()
+	printCores(cores, name)
 	print "Modularidad\t" + str(modularity)
 	print "Asortatividad\t" + str(assortativity)
 
