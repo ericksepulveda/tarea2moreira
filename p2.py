@@ -11,14 +11,16 @@ def main():
 							[0,0,0,1,1,0]]
 	edges = edgesFromMatrix(adjacency)
 
-	degrees = [[0 for i in range(6)] for i in range(6)]
-	for i in range(6):
+	degrees = [[0 for i in range(len(adjacency[0]))] for i in range(len(adjacency))]
+	for i in range(len(adjacency)):
 		degrees[i][i] = reduce(lambda x,y: x+y, adjacency[i])
 
 	adjacency = mat(adjacency)
 	degrees = mat(degrees)
 
 	laplace = degrees-adjacency
+
+	print "Matriz laplaciana\n" + str(laplace)
 
 	e_vals, e_vecs = LA.eig(laplace)
 
@@ -42,6 +44,7 @@ def main():
 
 	g = Graph(edges)
 	for i in range(len(g.vs)):
+		g.vs[i]["label"] = i
 		if fiedler_vector[i] <= 0:
 			g.vs[i]["color"] = "blue"
 	layout = g.layout("kk")
