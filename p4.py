@@ -5,7 +5,7 @@ DATADIR = "redes/"
 g = Graph.Read_GML(DATADIR + "redchica.gml")
 
 for i in range(len(g.vs)):
-	g.vs[i]["label"] = "n: " + str(i) + "\n"
+	g.vs[i]["label"] = "n: v" + str(i+1) + "\n"
 
 	default = len(sys.argv) < 2
 	if default or 'degree' in sys.argv:
