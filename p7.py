@@ -6,7 +6,7 @@ from p6_helpers import *
 DATADIR = "redes/"
 
 def main():
-	g = Graph.Read_GML(DATADIR + "roget.gml")
+	g = Graph.Read_GML(DATADIR + "correos.gml")
 	nodeCount = len(g.vs)
 	edgeCount = len(g.es)
 
@@ -29,24 +29,6 @@ def main():
 	modularity = getModularity(g)
 	assortativity = g.assortativity_degree()
 	printCores(cores, 'Red Recableada')
-	print "Modularidad\t" + str(modularity)
-	print "Asortatividad\t" + str(assortativity)
-
-	# Erdös-Renyi
-	g = Graph.Erdos_Renyi(nodeCount, m=edgeCount)
-	cores = getCores(g)
-	modularity = getModularity(g)
-	assortativity = g.assortativity_degree()
-	printCores(cores, 'Erdös-Renyi')
-	print "Modularidad\t" + str(modularity)
-	print "Asortatividad\t" + str(assortativity)
-
-	# Barabási-Albert
-	g = Graph.Barabasi(nodeCount, m=averageDegree/2)
-	cores = getCores(g)
-	modularity = getModularity(g)
-	assortativity = g.assortativity_degree()
-	printCores(cores, 'Barabási-Albert')
 	print "Modularidad\t" + str(modularity)
 	print "Asortatividad\t" + str(assortativity)
 
