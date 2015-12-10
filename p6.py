@@ -17,22 +17,38 @@ def main():
 	
 	# Getting data from original graph
 	cores = getCores(g)
+	modularity = getModularity(g)
+	assortativity = g.assortativity_degree()
 	printCores(cores, 'Red Original')
+	print "Modularidad\t" + str(modularity)
+	print "Asortatividad\t" + str(assortativity)
 
 	# Original rewired
 	g.rewire(edgeCount*2)
 	cores = getCores(g)
+	modularity = getModularity(g)
+	assortativity = g.assortativity_degree()
 	printCores(cores, 'Red Recableada')
+	print "Modularidad\t" + str(modularity)
+	print "Asortatividad\t" + str(assortativity)
 
 	# Erdös-Renyi
 	g = Graph.Erdos_Renyi(nodeCount, m=edgeCount)
 	cores = getCores(g)
+	modularity = getModularity(g)
+	assortativity = g.assortativity_degree()
 	printCores(cores, 'Erdös-Renyi')
+	print "Modularidad\t" + str(modularity)
+	print "Asortatividad\t" + str(assortativity)
 
 	# Barabási-Albert
 	g = Graph.Barabasi(nodeCount, m=averageDegree/2)
 	cores = getCores(g)
+	modularity = getModularity(g)
+	assortativity = g.assortativity_degree()
 	printCores(cores, 'Barabási-Albert')
+	print "Modularidad\t" + str(modularity)
+	print "Asortatividad\t" + str(assortativity)
 
 def printCores(cores, title):
 	print title
@@ -55,6 +71,9 @@ def getCores(graph):
 		cores[i] = getData(graph.k_core(i))
 	del cores[i]
 	return cores
+
+def getModularity(graph):
+	return graph.community_fastgreedy().as_clustering().modularity
 
 if __name__ == "__main__":
   main()
